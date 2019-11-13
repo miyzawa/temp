@@ -1,8 +1,8 @@
-r_file = open("Desktop/a.txt")
-w_file = open("Desktop/out.txt", "wt")
+r_file = open("query_all.tsv")
+w_file = open("out.txt", "wt")
 
-def validParam():
-    return param == 'query' or param == 'results' or param == 'appid'
+def validParam(param):
+    return param == 'query' or param == 'results' or param == 'bbox' or param == 'debug'
 
 with r_file as file:
     for row in file:
@@ -16,7 +16,8 @@ with r_file as file:
             paramValue = p.split("=")
             param = paramValue[0]
             value = paramValue[1]
-            if validParam():
+            if validParam(param):
                 resultRow += (p + "&")
         resultRow = resultRow[:-1]
-        w_file.write(url + '?' + resultRow + '\n')
+        if 'query=' in resultRow:
+            w_file.write('/v1' + url + '?' + resultRow + '\n')
